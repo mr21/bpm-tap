@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>BPM - Tap</title>
+<meta charset="utf-8"/>
+<!-- Facebook -->
+<meta property="og:title"       content="BPM-Tap"/>
+<meta property="og:image"       content="http://mr21.fr/BPM-Tap/thumbnail.jpg"/>
+<meta property="og:url"         content="http://mr21.fr/BPM-Tap/"/>
+<meta property="og:description" content="BMP-Tap s'inspire d'une petite feature de Fruity Loops pour mesurer les BPM"/>
+<!-- CSS.BPM-Tap -->
+<style type="text/css">
+html, body { height:100%; }
+body { margin:0; background:#000; }
+#global {
+	position:absolute; left:50%; top:50%; margin:-170px 0 0 -130px; width:256px; height:256px; color:#fff;
+	-webkit-touch-callout:none; -webkit-user-select:none; -khtml-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none;
+}
+#global a { position:absolute; left:0; right:0; top:0; bottom:0; color:inherit; border-radius:20px; border:5px solid; background:center no-repeat url(logo.png); }
+#global a:hover  { background-color:rgba(255,255,255, 0.1); }
+#global a:active { background-color:rgba(255,255,255, 0.3); }
+#global span { position:absolute; width:100%; top:100%; margin-top:10px; text-align:center; font:bold 5em sans-serif; }
+</style>
+<!-- JS.main -->
+<script type="text/javascript">
+window.onload = function() {
+	var dom_global = document.getElementById('global'),
+		dom_btn = dom_global.getElementsByTagName('a')[0],
+		dom_bpm = dom_global.getElementsByTagName('span')[0],
+		timeBefore = 0,
+		bpmStack = [],
+		nbBpmToAverage = 10;
+	dom_btn.onclick = function() {
+		var time = (new Date()).getTime();
+		if (timeBefore) {
+			var i, bpm = 60000 / (time - timeBefore),
+				lastBpm = bpmStack.length ? bpmStack[bpmStack.length - 1] : 0;
+			if (lastBpm && (bpm < lastBpm / 1.5 || bpm > lastBpm * 1.5)) {
+				timeBefore = bpmStack.length = 0;
+				dom_bpm.innerHTML = '0';
+			} else {
+				bpmStack.push(bpm);
+				for (i = bpm = 0; i < bpmStack.length && i < nbBpmToAverage; ++i)
+					bpm += bpmStack[bpmStack.length - 1 - i];
+				dom_bpm.innerHTML = Math.floor(bpm / i);
+			}
+		}
+		timeBefore = time;
+		return false;
+	};
+};
+</script>
+<script type="text/javascript">
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-418864-4', 'mr21.fr');
+	ga('send', 'pageview');
+</script>
+</head>
+<body>
+
+<div id="global">
+	<a href="#"></a>
+	<span>0</span>
+</div>
+
+</body>
+</html>
